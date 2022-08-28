@@ -8,12 +8,16 @@ import (
 )
 
 func LoadLexicon(lexiconPath string) (map[string]string, error) {
-
+	m := make(map[string]string)
 	lexiconPath = strings.TrimSuffix(lexiconPath, "\n")
+	if lexiconPath == "nil" {
+		m["COME"] = "k V m"
+		m["WORDS"] = "w 3` d z"
+		m["MECCA"] = "m E k @"
+
+		return m, nil
+	}
 	readFile, err := os.Open(lexiconPath)
-
-	var m map[string]string
-
 	if err != nil {
 		fmt.Println(err)
 		return m, err
