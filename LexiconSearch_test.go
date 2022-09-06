@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"os"
+	"path"
+	"testing"
+)
 
 func TestLoadLexicon(t *testing.T) {
 	tests := []struct {
@@ -16,10 +20,19 @@ func TestLoadLexicon(t *testing.T) {
 	dummy["WORDS"] = "w 3` d z"
 	dummy["MECCA"] = "m E k @"
 
-	dir := t.TempDir()
+	str := ""
+	for k, v := range dummy {
+		str += k + "\t" + v + "\n"
+	}
+	lex_path := path.Join(t.TempDir(), "lexicon.txt")
+	err := os.WriteFile(lex_path, []byte(str), 0644)
+
+	if err != nil {
+		t.Fatalf("unexpected error when writing lexicon file, err=%v", err)
+	}
 
 	for _, tc := range tests {
-		if got, _ := LoadLexicon(dir); got[tc.n] != tc.want {
+		if got, _ := LoadLexicon(lex_path); got[tc.n] != tc.want {
 			t.Errorf("got %s, want %s", got[tc.n], tc.want)
 		}
 	}
