@@ -35,28 +35,33 @@ func LoadLexicon(lexiconPath string) (map[string]string, error) {
 
 }
 
+func lexiconSearch(lexWords map[string]string, word string) string {
+
+	elem, ok := lexWords[strings.ToUpper(word)]
+	if ok {
+		fmt.Printf("The pronunciation of the word %s is %s\n", word, elem)
+	} else {
+		fmt.Printf("The word doesn't exist\n")
+	}
+
+	return elem
+}
+
 func main() {
 
 	var lexiconPath string
 	fmt.Scanln(&lexiconPath)
 
-	lex_words, err := LoadLexicon(lexiconPath)
+	lexWords, err := LoadLexicon(lexiconPath)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	var word string
-
 	fmt.Scanln(&word)
 	word = strings.TrimSuffix(word, "\n")
 
-	elem, ok := lex_words[strings.ToUpper(word)]
-
-	if ok {
-		fmt.Printf("The pronunciation of the word %s is %s\n", word, elem)
-	} else {
-		fmt.Printf("The word doesn't exist\n")
-	}
+	_ = lexiconSearch(lexWords, word)
 
 }
