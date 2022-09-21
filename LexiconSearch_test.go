@@ -31,9 +31,6 @@ func writeDummyLexicon(t *testing.T) string {
 	return lexPath
 }
 
-func TestRemove(t *testing.T) {
-	tests
-}
 func TestLoadLexicon(t *testing.T) {
 	tests := []struct {
 		n    string
@@ -48,6 +45,24 @@ func TestLoadLexicon(t *testing.T) {
 	for _, tc := range tests {
 		if got, _ := lexicon.LoadLexicon(lexPath); got[tc.n] != tc.want {
 			t.Errorf("got %s, want %s", got[tc.n], tc.want)
+		}
+	}
+}
+
+func TestRemove(t *testing.T) {
+	tests := []struct {
+		word string
+		want bool
+	}{
+		{"MECCA", true},
+		{"RAHIM", false},
+	}
+	lexPath := writeDummyLexicon(t)
+	lexWords, _ := lexicon.LoadLexicon(lexPath)
+	l := lexicon.Lexicon{Lex: lexWords}
+	for _, tc := range tests {
+		if got := l.Remove(tc.word); got != tc.want {
+			t.Errorf("got %t, want %t", got, tc.want)
 		}
 	}
 }
