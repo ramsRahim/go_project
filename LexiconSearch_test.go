@@ -66,3 +66,22 @@ func TestRemove(t *testing.T) {
 		}
 	}
 }
+
+func TestLookUp(t *testing.T) {
+	tests := []struct {
+		word string
+		want string
+	}{
+		{"COME", "k V m"},
+		{"WORDS", "w 3` d z"},
+		{"MECCA", "m E k @"},
+	}
+	lexPath := writeDummyLexicon(t)
+	lexWords, _ := lexicon.LoadLexicon(lexPath)
+	l := lexicon.Lexicon{Lex: lexWords}
+	for _, tc := range tests {
+		if got := l.LookUp(tc.word); got != tc.want {
+			t.Errorf("got %s, want %s", got, tc.want)
+		}
+	}
+}
