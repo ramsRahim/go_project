@@ -1,58 +1,17 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strings"
+
+	"github.com/ramsRahim/go_project/lexicon"
 )
 
-func LoadLexicon(lexiconPath string) (map[string]string, error) {
-	m := make(map[string]string)
-	lexiconPath = strings.TrimSuffix(lexiconPath, "\n")
-	readFile, err := os.Open(lexiconPath)
-	if err != nil {
-		fmt.Println(err)
-		return m, err
-	}
-
-	fileScanner := bufio.NewScanner(readFile)
-	fileScanner.Split(bufio.ScanLines)
-	var fileLines []string
-
-	for fileScanner.Scan() {
-		fileLines = append(fileLines, fileScanner.Text())
-	}
-
-	lex_words := make(map[string]string)
-
-	for _, line := range fileLines {
-		temp := strings.Split(line, "\t")
-		lex_words[strings.ToUpper(temp[0])] = temp[1]
-	}
-
-	return lex_words, err
-
-}
-
-func lexiconSearch(lexWords map[string]string, word string) string {
-
-	elem, ok := lexWords[strings.ToUpper(word)]
-	if ok {
-		fmt.Printf("The pronunciation of the word %s is %s\n", word, elem)
-	} else {
-		fmt.Printf("The word doesn't exist\n")
-	}
-
-	return elem
-}
-
 func main() {
-
 	var lexiconPath string
 	fmt.Scanln(&lexiconPath)
 
-	lexWords, err := LoadLexicon(lexiconPath)
+	lexWords, err := lexicon.LoadLexicon(lexiconPath)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -61,7 +20,10 @@ func main() {
 	var word string
 	fmt.Scanln(&word)
 	word = strings.TrimSuffix(word, "\n")
-
-	_ = lexiconSearch(lexWords, word)
-
+	l := lexicon.Lexicon{Lex: lexWords}
+	pronunciation := l.LookUp(word)
+	_ = l.Remove(word)
+	_ = l.LookUp(word)
+	_ = l.Add(word, pronunciation)
+	_ = l.LookUp(word)
 }

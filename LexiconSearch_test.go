@@ -5,6 +5,8 @@ import (
 	"os"
 	"path"
 	"testing"
+
+	"github.com/ramsRahim/go_project/lexicon"
 )
 
 func writeDummyLexicon(t *testing.T) string {
@@ -29,6 +31,9 @@ func writeDummyLexicon(t *testing.T) string {
 	return lexPath
 }
 
+func TestRemove(t *testing.T) {
+	tests
+}
 func TestLoadLexicon(t *testing.T) {
 	tests := []struct {
 		n    string
@@ -41,7 +46,7 @@ func TestLoadLexicon(t *testing.T) {
 
 	lexPath := writeDummyLexicon(t)
 	for _, tc := range tests {
-		if got, _ := LoadLexicon(lexPath); got[tc.n] != tc.want {
+		if got, _ := lexicon.LoadLexicon(lexPath); got[tc.n] != tc.want {
 			t.Errorf("got %s, want %s", got[tc.n], tc.want)
 		}
 	}
